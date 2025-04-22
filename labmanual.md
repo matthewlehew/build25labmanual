@@ -2,6 +2,8 @@
 
 ## Welcome to Your Lab Environment
 
+(And this is a test string to make sure it's pulling correctly.)
+
 To begin, log into the virtual machine using the following credentials: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
 
 **Note:** Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it to prevent any typing errors.
