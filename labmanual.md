@@ -13,7 +13,7 @@ The goal of this lab is to give your agent the ability to assign tasks to your c
 * To begin, log into the virtual machine using the following credentials: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
 * Open Edge and navigate to copilotstudio.microsoft.com
 * To sign in, use the number you were given as you walked into the session to replace the **?**’s in the username.
-  * Username: user???@build25automations.onmicrosoft.com
+  * Username: user???@build2025automations.onmicrosoft.com
   * Password: +++test@Build25.Password+++
 * Click “Get Started” to be brought to an agent building experience, **but don’t start building the agent yet!**
 * In the upper right corner, click the environment name **Build 25 (default)** and change it to the Developer environment named after your user id.
