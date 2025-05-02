@@ -2,13 +2,25 @@
 
 ## Lab Goals
 
+Enter your ID number here to use as part of your login later:
+
+@lab.textbox(IDnumber)
+
+Your username is +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++.
+
 Autonomous agents empower makers to solve complex problems, combining advanced reasoning capabilities with powerful tools. Learn how agent flows (whether built as a standalone workflow or as a tool for an agent to call) and UI automation through computer use tools can easily be built and deployed as part of a comprehensive business process transformation effort. Learn how to keep your information secure, help an agent know exactly when to use the right tool, and more—all within Copilot Studio.
 
 The goal of this lab is to give your agent the ability to assign tasks to your coworkers by building an automation that creates tasks in Microsoft Planner, assigns them to the right people, and sends them a notice in Microsoft Teams. 
 
 # Section 1: Logging in and creating an agent flow
 
-**Note:** Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it to prevent any typing errors.
+> [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it to prevent any typing errors.
+
+> [!Alert] Make sure you change environments!
+
+> [+Help] Helper text
+>
+> This is a test of expandable help blocks.
 
 * To begin, log into the virtual machine using the following credentials: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
 * Open Edge and navigate to copilotstudio.microsoft.com
