@@ -4,7 +4,7 @@
 
 Enter your ID number here to use as part of your login later:
 
-@lab.textbox(IDnumber)
+@lab.Textbox(IDnumber)
 
 Your username is +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++.
 
