@@ -2,7 +2,7 @@
 
 ## Lab Goals
 
-Enter your ID number here to use as part of your login later:
+Enter your ID number here to use as part of your login later, this will help save time:
 
 @lab.Textbox(IDnumber)
 
