@@ -31,7 +31,7 @@ The goal of this lab is to give your agent the ability to assign tasks to your c
 * In the upper right corner, click the environment name **Build 25 (default)** and change it to the Developer environment named after your user id.
 * You will land on the Copilot Studio home page in the new environment. If you see a “Welcome to Copilot Studio” banner, click Skip.
 * In the left hand nav, click **Flows**.
-* Select **+New flow++ to create a new agent flow.
+* Select **New flow** to create a new agent flow.
 
 Now it's time to use natural language to quickly build a new agent flow.
 
