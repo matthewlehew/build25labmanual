@@ -2,9 +2,9 @@
 
 ## Lab Goals
 
-Enter your ID number here to use as part of your login later, this will help save time:
+Enter your ID number here to use as part of your login later, this will help save time and reduce the risk of errors:
 
-@lab.Textbox(IDnumber)
+@lab.TextBox(IDnumber)
 
 Your username is +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++.
 
