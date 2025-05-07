@@ -30,7 +30,7 @@ Let's get started!
 > This is a test of expandable help blocks.
 
 - [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
-- [] Open Edge and navigate to +++copilotstudio.microsoft.com+++.
+- [] <[Click here to open Edge and navigate to Copilot Studio.](https://copilotstudio.microsoft.com)
 - [] To sign in, use the number you were given as you walked into the session to replace the **?**’s in the username.
   * Username: user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com
   * Password: +++test@Build25+++
