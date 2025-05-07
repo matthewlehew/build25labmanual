@@ -1,20 +1,29 @@
 @lab.Title
 
-## Lab Goals
+## Setup step
 
-Enter your ID number here to use as part of your login later, this will help save time and reduce the risk of errors:
+[!Alert] Do not skip this step! It will affect some of the login info that appears later in these instructions.
+
+Enter your three-digit number you were given in this box. It will be used as part of your login later, which will help save time and reduce the risk of errors. 
 
 @lab.TextBox(IDnumber)
 
+If you see the number appear here, you're good to go: @lab.Variable(IDnumber)
+
+## Lab Goals
+
 Your username is +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++.
 
-Autonomous agents empower makers to solve complex problems, combining advanced reasoning capabilities with powerful tools. Learn how agent flows (whether built as a standalone workflow or as a tool for an agent to call) and UI automation through computer use tools can easily be built and deployed as part of a comprehensive business process transformation effort. Learn how to keep your information secure, help an agent know exactly when to use the right tool, and more—all within Copilot Studio.
+The goal of this lab is to build an agent that utilizes agent flows and computer use to process  incoming invoices. In this scenario, customers upload invoices to a web portal that does **not** provide API access, and the portal emails you a copy of the invoice. You are wanting to:
 
-The goal of this lab is to give your agent the ability to assign tasks to your coworkers by building an automation that creates tasks in Microsoft Planner, assigns them to the right people, and sends them a notice in Microsoft Teams. 
+- Use AI to determine if the invoice aligns with the corresponding purchase order (hosted in a SharePoint document library)
+- Log invoices into a payment authorization platform that, like the web portal your customers use, doesn't provide API access.
+
+Let's get started!
 
 # Section 1: Logging in and creating an agent flow
 
-> [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it to prevent any typing errors.
+> [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it wherever your lab cursor is. Use this to prevent any typing or copy/pasting errors!
 
 > [!Alert] Make sure you change environments!
 
@@ -22,16 +31,16 @@ The goal of this lab is to give your agent the ability to assign tasks to your c
 >
 > This is a test of expandable help blocks.
 
-* To begin, log into the virtual machine using the following credentials: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
-* Open Edge and navigate to copilotstudio.microsoft.com
-* To sign in, use the number you were given as you walked into the session to replace the **?**’s in the username.
+- [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
+- [] Open Edge and navigate to +++copilotstudio.microsoft.com+++.
+- [] To sign in, use the number you were given as you walked into the session to replace the **?**’s in the username.
   * Username: user???@build2025automations.onmicrosoft.com
-  * Password: +++test@Build25.Password+++
-* Click “Get Started” to be brought to an agent building experience, **but don’t start building the agent yet!**
-* In the upper right corner, click the environment name **Build 25 (default)** and change it to the Developer environment named after your user id.
-* You will land on the Copilot Studio home page in the new environment. If you see a “Welcome to Copilot Studio” banner, click Skip.
-* In the left hand nav, click **Flows**.
-* Select **New flow** to create a new agent flow.
+  * Password: +++test@Build25+++
+- [] Click “Get Started” to be brought to an agent building experience, **but don’t start building the agent yet!**
+- [] In the upper right corner, click the environment name **Build 25 (default)** and change it to the Developer environment named after your user id.
+- [] You will land on the Copilot Studio home page in the new environment. If you see a “Welcome to Copilot Studio” banner, click Skip.
+- [] In the left hand nav, click **Flows**.
+- [] Select **New flow** to create a new agent flow.
 
 Now it's time to use natural language to quickly build a new agent flow.
 
