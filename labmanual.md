@@ -2,7 +2,7 @@
 
 ## Setup step
 
-[!Alert] Do not skip this step! It will affect some of the login info that appears later in these instructions.
+> [!Alert] Do not skip this step! It will affect some of the login info that appears later in these instructions.
 
 Enter your three-digit number you were given in this box. It will be used as part of your login later, which will help save time and reduce the risk of errors. 
 
