@@ -12,8 +12,6 @@ If you see the number appear here, you're good to go: @lab.Variable(IDnumber)
 
 ## Lab Goals
 
-Your username is +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++.
-
 The goal of this lab is to build an agent that utilizes agent flows and computer use to process  incoming invoices. In this scenario, customers upload invoices to a web portal that does **not** provide API access, and the portal emails you a copy of the invoice. You are wanting to:
 
 - Use AI to determine if the invoice aligns with the corresponding purchase order (hosted in a SharePoint document library)
@@ -34,7 +32,7 @@ Let's get started!
 - [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
 - [] Open Edge and navigate to +++copilotstudio.microsoft.com+++.
 - [] To sign in, use the number you were given as you walked into the session to replace the **?**’s in the username.
-  * Username: user???@build2025automations.onmicrosoft.com
+  * Username: user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com
   * Password: +++test@Build25+++
 - [] Click “Get Started” to be brought to an agent building experience, **but don’t start building the agent yet!**
 - [] In the upper right corner, click the environment name **Build 25 (default)** and change it to the Developer environment named after your user id.
