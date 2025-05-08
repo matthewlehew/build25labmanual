@@ -124,7 +124,7 @@ We're almost done with the prompt. Now we want to make sure it outputs the respo
 We're almost done. Let's connect the pipes that will bring our invoice and purchase order to the prompt and then add the final action to respond to the agent.
 
 - [] In the **Run a prompt** parameters, you'll see two new parameters corresponding to the two input values you added to the prompt.
-  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to the **Get Attachment (V2) action in the dynamic field list, and select **Content Bytes**.
+  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to the **Get Attachment (V2)** action in the dynamic field list, and select **Content Bytes**.
   - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path**.
 - [] Click **+** to add a final action and search for +++Respond to the agent+++. Select **Respond to the agent** under the **Skills** connector.
 - [] In the panel for the response action, select **Add an output**. Select the blue **Yes/No** option.
