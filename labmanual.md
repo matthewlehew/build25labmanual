@@ -152,20 +152,22 @@ We want this particular agent to run in response to a business event, not a conv
 - [] In the agent's **Overview** page, in the **Triggers** panel, select **Add trigger**.
 - [] In the window that appears, select the trigger called **When a new email arrives (V3)** from the **Office 365 Outlook** connector. Click **Next**.
 - [] On the next screen, you should see the connections automatically form. You can leave the trigger name as it is and click **Next**.
-- [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and replace it with +++An email with an invoice has arrived. Use @{triggerOutputs()?['body/id']} for Message ID and use @{triggerOutputs()?['body/attachments'][0]['id']} for Attachment ID to validate.+++
-
+- [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and replace it with +++An email with an invoice has arrived. Use @{triggerOutputs()?['body/id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.+++
+An email with an invoice has arrived. Use @{triggerOutputs()?['body/value'][0]['id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.
 > [+Help] What did that do? (Optional info)
 >
 > This is a test of expandable help blocks.
 
 - [] Click **Create trigger**, then click **Close**.
 - [] On the top of the agent overview page, click **Publish**, then click **Publish** again.
+- [] We want to ensure the agent can connect to the flow, so in the ellipsis menu next to **Test your agent**, select **Manage connections**. In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the connections have a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
 
 # Section 5: Time to test!
 
 Let's see what we've got so far! Open a new tab in Edge and visit +++https://forms.office.com/r/N41p1fHAin+++. Selecting **Compliant** will randomly send one of four invoices that matches its corresponding purchase order in SharePoint. Selecting **Not compliant** will send an invoice that has the correct items and the correct total amount, but the quantities and prices of the items are different.
 
 - [] Select **Compliant** and submit the form, then return to your Copilot Studio tab.
+- [] Under the **Activity** tab, you should be able to see the agent run that just started. Click on it.
 
 
 * Describe your flow to Copilot using natural language with the following prompt: +++Using the button trigger, when a user manually uploads an invoice file, save the file to OneDrive folder and send a notification to a Teams channel.+++
