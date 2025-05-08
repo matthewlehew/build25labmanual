@@ -2,6 +2,7 @@
 > [!Alert] We are currently working through the following issues:
 >
 > - Computer use tools cannot be built until eng finishes allowlisting the environments
+> - Emails from the flow that's sending the invoices for testing are being bounced back. This is because it's a trial tenant, there's an open ticket with MS Support to get this resolved. Plan B is to have participants manually email the invoice to themselves.
 > - AIB actions in agent flows are currently failing, there is an ICM on this and it should be resolved quickly
 > - The ability to create agent flows directly from the agent is expected to be live on Sunday per Heather. Instructions will be edited to accommodate this new flow, and that is when screenshots will be added to instructions.
 > - Please ping matthewlehew with any issues encountered during testing.
