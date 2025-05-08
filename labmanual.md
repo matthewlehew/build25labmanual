@@ -19,28 +19,97 @@ The goal of this lab is to build an agent that utilizes agent flows and computer
 
 Let's get started!
 
-# Section 1: Logging in and creating an agent flow
+# Section 1: Logging in and creating an agent
 
 > [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it wherever your lab cursor is. Use this to prevent any typing or copy/pasting errors!
 
-> [!Alert] Make sure you change environments!
+- [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
+- [] Click here to open Edge and navigate to +++https://copilotstudio.microsoft.com+++.
+- [] To sign in, use the following credentials. Choose the option to stay signed in, and dismiss any prompts from Edge that offer to reuse the password.
+  - Username: +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++
+  - Password: +++test@Build25+++
+- [] Click **Get Started** on the welcome dialog (and then **Skip** on the next welcome dialog if it appears) to be brought to an agent building experience, **but don’t start building the agent yet!**
 
-> [+Help] Helper text
+> [!Alert] Make sure you follow the next step and change your environment!
+
+- [] In the upper right corner, click the environment name **Build2025Automations (default)** and change it to the Developer environment named after your user id, which should be listed under **Supported environments**.
+- [] You will land on the Copilot Studio home page in the developer environment. If you see a “Welcome to Copilot Studio” banner, click **Skip**.
+- [] In the left hand nav, click **Create**, then click **New agent**.
+
+> [!Knowledge] You can experiment with the natural language process if you'd like, but we recomment following these steps to move quickly:
+
+- [] Click **Skip to configure** in the upper right corner, then fill the following fields:
+  - Name: +++Invoice handling agent+++
+  - Description: +++An agent that validates and logs incoming vendor invoices.+++
+  - Instructions: +++When an invoice arrives via email, send the attachment information to the invoice validator agent flow to see if it's compliant. If it is, log the invoice in the payment system.+++
+- [] Click **Create** to land on the agent's Overview page. Under Details > Orchestration, the toggle should appear grey for a few seconds and then default to **Enabled**. If it doesn't, turn the toggle on.
+
+> [+Help] Why didn't we add knowledge? (Optional info)
 >
 > This is a test of expandable help blocks.
 
-- [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
-- [] <[Click here to open Edge and navigate to Copilot Studio.](https://copilotstudio.microsoft.com)
-- [] To sign in, use the number you were given as you walked into the session to replace the **?**’s in the username.
-  * Username: user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com
-  * Password: +++test@Build25+++
-- [] Click “Get Started” to be brought to an agent building experience, **but don’t start building the agent yet!**
-- [] In the upper right corner, click the environment name **Build 25 (default)** and change it to the Developer environment named after your user id.
-- [] You will land on the Copilot Studio home page in the new environment. If you see a “Welcome to Copilot Studio” banner, click Skip.
-- [] In the left hand nav, click **Flows**.
-- [] Select **New flow** to create a new agent flow.
+Now it's time to create our agent flow.
 
-Now it's time to use natural language to quickly build a new agent flow.
+===
+
+# Section 2: Creating the agent flow
+
+- [] In the left hand nav, click **Flows**, and then click **Start in designer** in the landing page.
+- [] In the designer, click **Add a trigger**, then type +++Copilot Studio+++ in the search field. Under **Skills**, click the trigger called **When an agent calls the flow.**
+- [] In the panel that appears, click **Add an input**, then the purple **Text** option.
+  - [] In the name field, replace "Input" with +++Message ID+++.
+  - [] In the description field, replace "Please enter your input" with +++Use the email's Message ID.+++
+- [] Click **Add an input** again and select the purple **Text** option again.
+  - [] In the name field, replace "Input 1" with +++Attachment ID+++.
+  - [] In the description field, replace "Please enter your input" with +++Use the email's Attachment ID.+++
+- [] In the main canvas of the designer, click the **+** icon below the trigger, then search for +++Get Attachment+++ and select the **Get Attachment (V2)** action that appears under **Office 365 Outlook**.
+  - [] Click **Sign in** to create your user's connection to Outlook. Select your user account in the pop-up window. If asked, click **Allow access**.
+  - [] If you see an OAuth connection error, click the **Pop-Up Block** icon on the right side of the Edge address bar, then select "Always allow pop-ups and redirects from..." and click **Done**. Then try clicking **Sign in** again.
+- [] Fill the two required parameters for the Get Attachment action:
+  - [] In the Message Id parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **Message ID**. This will insert a dynamic tag in the parameter field.
+  - [] Do the same thing in the Attachment Id parameter, except under **When an agent calls the flow**, click **Attachment ID**.
+
+> [+Help] Why are we doing it this way? (Optional info)
+>
+> This is a test of expandable help blocks.
+
+It's time to add an AI-powered action that will pull the purchase order number from the invoice, which will help us grab the correct PO from SharePoint.
+
+- [] Click the **+** button on the canvas to add a new action, then search for +++Extract information from invoices+++ and click the **Extract information from invoices** action under **AI Builder**.
+  - [] Click **Sign in** and create the connection.
+  - [] In the **Invoice file** parameter, type **/** and click **Insert dynamic content**. Select **Content Bytes** under the **Get Attachment (V2)** action in the parameter list.
+- [] Click the **+** again to add an action after the invoice extraction action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint**.
+  - [] Create the connection. **Do not check** "Connect via on-premises data gateway"
+  - [] In the **Site Address** parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
+  - [] In the **File Path** parameter, type **/** and click **Insert expression**, which is the first time you're clicking this particular option.
+  - [] In the expression editor flyout that appears, paste +++concat('/Purchase Orders/',outputs('Extract_information_from_invoices')?['body/responsev2/predictionOutput/result/fields/purchaseOrder/valueText'],'.pdf')+++ and then click **Add**.
+
+> [+Help] What is this doing? (Optional info)
+>
+> This is a test of expandable help blocks.
+
+We have the file content for our vendor invoice and the corresponding purchase order, now it's time to make sure they align!
+
+- [] Click the **+** button to add a new action, then search for +++Run a prompt+++. Select the **Run a prompt** button under AI Builder.
+- [] For the **Prompt** parameter, click the dropdown menu and select **New custom prompt**.
+- [] After dismissing any teaching popups that appear, add +++Invoice validation prompt+++ as the prompt title.
+- [] In the instructions field, paste the following: +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: 
+ Purchase order: +++
+  - [] Place the cursor after "Invoice:" in the prompt, then click **Add content** at the bottom of the instructions window. Select **Image or document** and then select **Ok** when the dialog appears about changing the model to GPT-4o. Rename the input to **Invoice** and select **Close** (you can skip the sample data upload).
+  - [] Place the cursor after "Purchase order:" in the prompt, then click **Add content** again. Select **Image or document** and then name the input **Purchase order**. Select **Close**.
+ 
+We're almost done with the prompt. Now we want to make sure it outputs the response in a format we can work with (as opposed to free text). 
+
+- [] On the right side of the prompt workspace, in the upper right hand corner of the **Model response** panel, click the **Text** dropdown and change the output format to **JSON**. In the same area of the screen, click the **Output settings** icon to the left of the word **Output**.
+- [] The left side of the panel has changed to a JSON configuration experience. In the new window, paste the following: +++{"InvoiceMatch": true, "Reasoning": "The details of the invoice match the details of the purchase order."}+++ Then click **Apply**.
+
+> [+Help] What was that about? (Optional info)
+>
+> This is a test of expandable help blocks.
+
+- [] 
+
+
 
 * Describe your flow to Copilot using natural language with the following prompt: +++Using the button trigger, when a user manually uploads an invoice file, save the file to OneDrive folder and send a notification to a Teams channel.+++
 * Click the arrow button to start the building process.
