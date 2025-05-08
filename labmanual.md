@@ -6,7 +6,7 @@
 > - The ability to create agent flows directly from the agent is expected to be live on Sunday per Heather. Instructions will be edited to accommodate this new flow, and that is when screenshots will be added to instructions.
 > - Please ping matthewlehew with any issues encountered during testing.
 
-@lab.Title
+# Extend agents everywhere: Agent flows and computer use tools in Copilot Studio
 
 ## Setup step
 
