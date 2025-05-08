@@ -152,7 +152,7 @@ We want this particular agent to run in response to a business event, not a conv
 - [] In the agent's **Overview** page, in the **Triggers** panel, select **Add trigger**.
 - [] In the window that appears, select the trigger called **When a new email arrives (V3)** from the **Office 365 Outlook** connector. Click **Next**.
 - [] On the next screen, you should see the connections automatically form. You can leave the trigger name as it is and click **Next**.
-- [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and replace it with +++An email with an invoice has arrived. Use @{triggerOutputs()?['body/'id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.+++
+- [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and replace it with +++An email with an invoice has arrived. Use @{triggerOutputs()?['body/id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.+++
 An email with an invoice has arrived. Use @{triggerOutputs()?['body/value'][0]['id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.
 > [+Help] What did that do? (Optional info)
 >
