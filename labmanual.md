@@ -33,7 +33,7 @@ Let's get started!
 > [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it wherever your lab cursor is. Use this to prevent any typing or copy/pasting errors!
 
 - [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
-- [] Click here to open Edge and navigate to +++https://copilotstudio.microsoft.com+++.
+- [] Open Edge and navigate to +++https://copilotstudio.microsoft.com+++.
 - [] To sign in, use the following credentials. Choose the option to stay signed in, and dismiss any prompts from Edge that offer to reuse the password.
   - Username: +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++
   - Password: +++test@Build25+++
