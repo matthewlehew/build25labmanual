@@ -1,3 +1,11 @@
+## NOTES for lab testers (Updated May 8, 2025, 1:10PM EDT)
+> [!Alert] We are currently working through the following issues:
+>
+> - Computer use tools cannot be built until eng finishes allowlisting the environments
+> - AIB actions in agent flows are currently failing, there is an ICM on this and it should be resolved quickly
+> - The ability to create agent flows directly from the agent is expected to be live on Sunday per Heather. Instructions will be edited to accommodate this new flow, and that is when screenshots will be added to instructions.
+> - Please ping matthewlehew with any issues encountered during testing.
+
 @lab.Title
 
 ## Setup step
