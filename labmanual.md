@@ -107,8 +107,65 @@ We're almost done with the prompt. Now we want to make sure it outputs the respo
 >
 > This is a test of expandable help blocks.
 
-- [] 
+- [] Click **Save** to save the prompt.
 
+> [!Knowledge] At this point it would normally be a great idea to test the prompt by itself, but in the interest of time we'll push along.
+
+We're almost done. Let's connect the pipes that will bring our invoice and purchase order to the prompt and then add the final action to respond to the agent.
+
+- [] In the **Run a prompt** parameters, you'll see two new parameters corresponding to the two input values you added to the prompt.
+  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to the **Get Attachment (V2) action in the dynamic field list, and select **Content Bytes**.
+  - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path**.
+- [] Click **+** to add a final action and search for +++Respond to the agent+++. Select **Respond to the agent** under the **Skills** connector.
+- [] In the panel for the response action, select **Add an output**. Select the blue **Yes/No** option.
+  - [] Replace "Enter a name" with +++InvoiceMatch+++.
+  - [] Replace "Enter a value to respond with" with by typing **/**, selecting **Insert dynamic content**, and selecting **InvoiceMatch** under **Run a prompt**.
+  - [] Replace "Enter a description of the output" with +++Whether the invoice matches the corresponding purchase order.+++
+- [] Select **Add an output** again and select the purple **Text** option.
+  - [] Replace "Enter a name" with +++Reasoning+++.
+  - [] Replace "Enter a value to respond with" by typing **/**, selecting **Insert dynamic content**, and selecting **Reasoning** under **Run a prompt**.
+  - [] Replace "Enter a description of the output" with +++The reason the model made its decision.+++
+- [] Near the upper right corner of the designer, select **Save draft**, then **Publish**. Disregard the warning about **Run a prompt** not having a content approval action after it.
+
+> [!Knowledge] On content approvals (Optional info)
+>
+> Content here
+
+- [] We want to give the agent flow a presentable name, so let's click the **Overview** tab at the top, then click **Edit** in the upper right hand corner of the **Details** pane, then name the flow +++Invoice validation flow+++. Click **Save**.
+
+Now that the agent flow is built, it's time to add it to the agent, set up the trigger, and test it out!
+
+===
+
+# Section 3: Adding the agent flow to the agent
+
+- [] In the left hand nav, click **Agents**, then click **Invoice handling agent**.
+- [] Scroll down to the **Actions** panel and click **Add action**. In the list of available actions that appears, you should see your newly-created flow. Click **Invoice validation flow** to start adding it.
+- [] In the configuration window that appears, leave **Name** as it is and replace the content of **Description for the agent to know when to use this action** with +++Use this to determine whether a submitted vendor invoice matches the PO on file.+++
+- [] If you like, you can expand the **Inputs and outputs** section to see the two inputs we added to the agent flow trigger appear here. We're going to trust the agent to fill those with the info we provide to the agent via its trigger.
+- [] Click **Add action** to finish adding it to the agent. You should see it listed in the **Actions** panel.
+
+# Section 4: Adding the trigger to the agent
+
+We want this particular agent to run in response to a business event, not a conversation. To do that, we need to add a trigger to the agent. In just a couple steps, we are going to add (and customize) a trigger that will fire whenever an email arrives in your inbox.
+
+- [] In the agent's **Overview** page, in the **Triggers** panel, select **Add trigger**.
+- [] In the window that appears, select the trigger called **When a new email arrives (V3)** from the **Office 365 Outlook** connector. Click **Next**.
+- [] On the next screen, you should see the connections automatically form. You can leave the trigger name as it is and click **Next**.
+- [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and replace it with +++An email with an invoice has arrived. Use @{triggerOutputs()?['body/id']} for Message ID and use @{triggerOutputs()?['body/attachments'][0]['id']} for Attachment ID to validate.+++
+
+> [+Help] What did that do? (Optional info)
+>
+> This is a test of expandable help blocks.
+
+- [] Click **Create trigger**, then click **Close**.
+- [] On the top of the agent overview page, click **Publish**, then click **Publish** again.
+
+# Section 5: Time to test!
+
+Let's see what we've got so far! Open a new tab in Edge and visit +++https://forms.office.com/r/N41p1fHAin+++. Selecting **Compliant** will randomly send one of four invoices that matches its corresponding purchase order in SharePoint. Selecting **Not compliant** will send an invoice that has the correct items and the correct total amount, but the quantities and prices of the items are different.
+
+- [] Select **Compliant** and submit the form, then return to your Copilot Studio tab.
 
 
 * Describe your flow to Copilot using natural language with the following prompt: +++Using the button trigger, when a user manually uploads an invoice file, save the file to OneDrive folder and send a notification to a Teams channel.+++
