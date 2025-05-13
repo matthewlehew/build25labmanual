@@ -4,7 +4,6 @@
 > - Computer use tools cannot be built until eng finishes allowlisting the environments
 > - Emails from the flow that's sending the invoices for testing are being bounced back. This is because it's a trial tenant, there's an open ticket with MS Support to get this resolved. Plan B is to have participants manually email the invoice to themselves.
 > - AIB actions in agent flows are currently failing, there is an ICM on this and it should be resolved quickly
-> - The ability to create agent flows directly from the agent is expected to be live on Sunday per Heather. Instructions will be edited to accommodate this new flow, and that is when screenshots will be added to instructions.
 > - Please ping matthewlehew with any issues encountered during testing.
 
 # Extend agents everywhere: Agent flows and computer use tools in Copilot Studio
@@ -33,10 +32,16 @@ Let's get started!
 > [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it wherever your lab cursor is. Use this to prevent any typing or copy/pasting errors!
 
 - [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
-- [] Open Edge and navigate to +++https://copilotstudio.microsoft.com+++.
+- [] Open Edge and navigate to +++make.powerautomate.com+++.
 - [] To sign in, use the following credentials. Choose the option to stay signed in, and dismiss any prompts from Edge that offer to reuse the password.
   - Username: +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++
   - Password: +++test@Build25+++
+- [] In the left nav, at or near the bottom, click **Power Platform**, then **Copilot Studio**.
+
+> [+Help] Why did I start in Power Automate? (Optional info)
+>
+> There's a bug in test environments regarding brand new accounts like the lab accounts you're using today. This is a little trick to avoid it before it's fixed. :)
+
 - [] Click **Get Started** on the welcome dialog (and then **Skip** on the next welcome dialog if it appears) to be brought to an agent building experience, **but don’t start building the agent yet!**
 
 > [!Alert] Make sure you follow the next step and change your environment!
@@ -71,12 +76,6 @@ Now it's time to create our agent flow.
 - [] Click **Add an input** again and select the purple **Text** option again.
   - [] In the name field, replace "Input 1" with +++Attachment ID+++.
   - [] In the description field, replace "Please enter your input" with +++Use the email's Attachment ID.+++
-- [] In the main canvas of the designer, click the **+** icon below the trigger, then search for +++Get Attachment+++ and select the **Get Attachment (V2)** action that appears under **Office 365 Outlook**.
-  - [] Click **Sign in** to create your user's connection to Outlook. Select your user account in the pop-up window. If asked, click **Allow access**.
-  - [] If you see an OAuth connection error, click the **Pop-Up Block** icon on the right side of the Edge address bar, then select "Always allow pop-ups and redirects from..." and click **Done**. Then try clicking **Sign in** again.
-- [] Fill the two required parameters for the Get Attachment action:
-  - [] In the Message Id parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **Message ID**. This will insert a dynamic tag in the parameter field.
-  - [] Do the same thing in the Attachment Id parameter, except under **When an agent calls the flow**, click **Attachment ID**.
 
 > [+Help] Why are we doing it this way? (Optional info)
 >
@@ -84,12 +83,19 @@ Now it's time to create our agent flow.
 >
 > The other relevant reason is simpler: today, passing objects from agents to agents flows isn't yet supported. :) 
 
+- [] In the main canvas of the designer, click the **+** icon below the trigger, then search for +++Get Attachment+++ and select the **Get Attachment (V2)** action that appears under **Office 365 Outlook**.
+  - [] Click **Sign in** to create your user's connection to Outlook. Select your user account in the pop-up window. If asked, click **Allow access**.
+  - [] If you see an OAuth connection error, click the **Pop-Up Block** icon on the right side of the Edge address bar, then select "Always allow pop-ups and redirects from..." and click **Done**. Then try clicking **Sign in** again.
+- [] Fill the two required parameters for the Get Attachment action:
+  - [] In the Message Id parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **Message ID**. This will insert a dynamic tag in the parameter field.
+  - [] Do the same thing in the Attachment Id parameter, except under **When an agent calls the flow**, click **Attachment ID**.
+
 It's time to add an AI-powered action that will pull the purchase order number from the invoice, which will help us grab the correct PO from SharePoint.
 
-- [] Click the **+** button on the canvas to add a new action, then search for +++Extract information from invoices+++ and click the **Extract information from invoices** action under **AI Builder**.
+- [] Click the **+** button under **Get Attachment (V2)** on the canvas to add a new action, then search for +++Extract information from invoices+++ and click the **Extract information from invoices** action under **AI Builder**.
   - [] Click **Sign in** and create the connection.
   - [] In the **Invoice file** parameter, type **/** and click **Insert dynamic content**. Select **Content Bytes** under the **Get Attachment (V2)** action in the parameter list.
-- [] Click the **+** again to add an action after the invoice extraction action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint**.
+- [] Click the **+** button at the bottom of the flow to add an action after the invoice extraction action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint**.
   - [] Create the connection. **Do not check** "Connect via on-premises data gateway"
   - [] In the **Site Address** parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
   - [] In the **File Path** parameter, type **/** and click **Insert expression**, which is the first time you're clicking this particular option.
@@ -105,8 +111,8 @@ We have the file content for our vendor invoice and the corresponding purchase o
 - [] For the **Prompt** parameter, click the dropdown menu and select **New custom prompt**.
 - [] After dismissing any teaching popups that appear, add +++Invoice validation prompt+++ as the prompt title.
 - [] In the instructions field, paste the following: +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: Purchase order: +++
-  - [] Place the cursor after "Invoice:" in the prompt, then click **Add content** at the bottom of the instructions window. Select **Image or document** and then select **Ok** when the dialog appears about changing the model to GPT-4o. Rename the input to **Invoice** and select **Close** (you can skip the sample data upload).
-  - [] Place the cursor after "Purchase order:" in the prompt, then click **Add content** again. Select **Image or document** and then name the input **Purchase order**. Select **Close**.
+  - [] Place the cursor after "Invoice:" in the prompt, then click **Add content** at the bottom of the instructions window. Select **Image or document** and then select **Ok** when the dialog appears about changing the model to GPT-4o. Rename the input to +++Invoice+++ and select **Close** (you can skip the sample data upload).
+  - [] Place the cursor after "Purchase order:" in the prompt, then click **Add content** again. Select **Image or document** and then name the input +++Purchase order+++. Select **Close**.
  
 We're almost done with the prompt. Now we want to make sure it outputs the response in a format we can work with (as opposed to free text). 
 
@@ -124,7 +130,7 @@ We're almost done with the prompt. Now we want to make sure it outputs the respo
 We're almost done. Let's connect the pipes that will bring our invoice and purchase order to the prompt and then add the final action to respond to the agent.
 
 - [] In the **Run a prompt** parameters, you'll see two new parameters corresponding to the two input values you added to the prompt.
-  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to the **Get Attachment (V2)** action in the dynamic field list, and select **Content Bytes**.
+  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to find **Content Bytes** under the **Get Attachment (V2)** action in the dynamic field list.
   - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path**.
 - [] Click **+** to add a final action and search for +++Respond to the agent+++. Select **Respond to the agent** under the **Skills** connector.
 - [] In the panel for the response action, select **Add an output**. Select the blue **Yes/No** option.
@@ -135,9 +141,14 @@ We're almost done. Let's connect the pipes that will bring our invoice and purch
   - [] Replace "Enter a name" with +++Reasoning+++.
   - [] Replace "Enter a value to respond with" by typing **/**, selecting **Insert dynamic content**, and selecting **Reasoning** under **Run a prompt**.
   - [] Replace "Enter a description of the output" with +++The reason the model made its decision.+++
+
+> [+Knowledge] What's up with this response?
+>
+> Just as we created two input variables for the agent to pass to the flow, we are creating two output variables for the flow to pass back to the agent. The agent will be able to see whether the invoice matched the purchase order, as well as the reason the AI prompt chose the answer it did.
+
 - [] Near the upper right corner of the designer, select **Save draft**, then **Publish**. Disregard the warning about **Run a prompt** not having a content approval action after it.
 
-> [!Knowledge] On content approvals
+> [+Knowledge] On content approvals
 >
 > We are skipping the content approval because this is a controlled lab environment, but human review is always an important design element of a business process, especially processes augmented by AI. Even if it isn't part of the specific flow you build, your business process should include human review of important decisions or content generated by AI.
 
