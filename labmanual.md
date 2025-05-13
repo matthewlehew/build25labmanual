@@ -110,7 +110,7 @@ We have the file content for our vendor invoice and the corresponding purchase o
 - [] Click the **+** button to add a new action, then search for +++Run a prompt+++. Select the **Run a prompt** button under AI Builder.
 - [] For the **Prompt** parameter, click the dropdown menu and select **New custom prompt**.
 - [] After dismissing any teaching popups that appear, add +++Invoice validation prompt+++ as the prompt title.
-- [] In the instructions field, paste +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: Purchase order:  +++
+- [] In the instructions field, paste +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: Purchase order:  +++ into the field.
   - [] Place the cursor after "Invoice:" in the prompt, then click **Add content** at the bottom of the instructions window. Select **Image or document** and then select **Ok** when the dialog appears about changing the model to GPT-4o. Rename the input to +++Invoice+++ and select **Close** (you can skip the sample data upload).
   - [] Place the cursor after "Purchase order:" in the prompt, then click **Add content** again. Select **Image or document** and then name the input +++Purchase order+++. Select **Close**.
  
