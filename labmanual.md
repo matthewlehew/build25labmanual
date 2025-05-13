@@ -1,4 +1,4 @@
-## NOTES for lab testers (Updated May 8, 2025, 1:10PM EDT)
+## NOTES for lab testers (Updated May 13, 2025, 9:50AM EDT)
 > [!Alert] We are currently working through the following issues:
 >
 > - Computer use tools cannot be built until eng finishes allowlisting the environments
