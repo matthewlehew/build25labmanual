@@ -73,8 +73,8 @@ Now it's time to create our agent flow.
 You'll land in the designer with two actions already created. The first is the trigger that accepts the call from the agent, and the second is the action that sends a response. The trigger will always be at the top, and the response will usually need to stay at the bottom.
 
 - [] Click the **When an agent calls the flow** trigger. In the panel that appears, click **Add an input**, then the purple **Text** option.
-  - [] In the name field, replace "Input" with +++File identifier+++.
-  - [] In the description field, replace "Please enter your input" with +++Use the file identifier of the new invoice.+++
+  - [] In the name field, replace "Input" with +++File path+++.
+  - [] In the description field, replace "Please enter your input" with +++Use the file path of the new invoice.+++
 
 > [+Help] Why are we doing it this way? (Optional info)
 >
@@ -82,24 +82,22 @@ You'll land in the designer with two actions already created. The first is the t
 >
 > The other relevant reason is simpler: today, passing objects from agents to agents flows isn't yet supported. :) 
 
-- [] In the main canvas of the designer, click the **+** icon below the trigger (in between the two actions), then search for +++Get file content+++ and select the **Get file content** action that appears under **SharePoint**. Do **not** select the **Get file content using path** action.
-  - [] Click **Sign in** to create your user's connection to SharePoint. Select your user account in the pop-up window. If asked, click **Allow access**.
+- [] In the main canvas of the designer, click the **+** icon below the trigger (in between the two actions), then search for +++Get file content using path+++ and select the **Get file content using path** action that appears under **SharePoint**.
+  - [] Click **Sign in** to create your user's connection to SharePoint. **Do not check** "Connect via on-premises data gateway." Select your user account in the pop-up window. If asked, click **Allow access**.
   - [] If you see an OAuth connection error, click the **Pop-Up Block** icon on the right side of the Edge address bar, then select "Always allow pop-ups and redirects from..." and click **Done**. Then try clicking **Sign in** again.
 - [] Fill the two required parameters for the **Get file content** action:
-  - [] In the Site Address parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
-  - [] In the Message Id parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **Message ID**. This will insert a dynamic tag in the parameter field.
-  - [] Do the same thing in the Attachment Id parameter, except under **When an agent calls the flow**, click **Attachment ID**.
+  - [] In the **Site Address** parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
+  - [] In the **File Path** parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **File path**. This will insert a dynamic tag in the parameter field.
 
 It's time to add an AI-powered action that will pull the purchase order number from the invoice, which will help us grab the correct PO from SharePoint.
 
-- [] Click the **+** button under **Get Attachment (V2)** on the canvas to add a new action, then search for +++Extract information from invoices+++ and click the **Extract information from invoices** action under **AI Builder**.
+- [] Click the **+** button under **Get file content** on the canvas to add a new action, then search for +++Process invoices+++ and click the **Process invoices** action under **AI Builder**.
   - [] Click **Sign in** and create the connection.
-  - [] In the **Invoice file** parameter, type **/** and click **Insert dynamic content**. Select **Content Bytes** under the **Get Attachment (V2)** action in the parameter list.
-- [] Click the **+** button below **Extract information from invoices** to add an action after the invoice extraction action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint**.
-  - [] Create the connection. **Do not check** "Connect via on-premises data gateway"
-  - [] In the **Site Address** parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
+  - [] In the **Invoice file** parameter, type **/** and click **Insert dynamic content**. Select **File Content** under the **Get file content using path** action in the parameter list.
+- [] Click the **+** button below **Process invoices** to add an action after the invoice processing action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint**.
+  - [] In the **Site Address** parameter of the new action, named **Get file content using path 1**, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
   - [] In the **File Path** parameter, type **/** and click **Insert expression**, which is the first time you're clicking this particular option.
-  - [] In the expression editor flyout that appears, paste +++concat('/Purchase Orders/',outputs('Extract_information_from_invoices')?['body/responsev2/predictionOutput/result/fields/purchaseOrder/valueText'],'.pdf')+++ and then click **Add**.
+  - [] In the expression editor flyout that appears, paste +++concat('/Purchase Orders/',outputs('Process_invoices')?['body/responsev2/predictionOutput/result/fields/purchaseOrder/valueText'],'.pdf')+++ and then click **Add**.
 
 > [+Help] What is this doing? (Optional info)
 >
@@ -107,7 +105,7 @@ It's time to add an AI-powered action that will pull the purchase order number f
 
 We have the file content for our vendor invoice and the corresponding purchase order, now it's time to make sure they align!
 
-- [] Click the **+** button under **Get file content using path** to add a new action, then search for +++Run a prompt+++. Select the **Run a prompt** button under AI Builder, then click the existing Microsoft Dataverse connection that was created earlier.
+- [] Click the **+** button under **Get file content using path** to add a new action, then search for +++Run a prompt+++. Select the **Run a prompt** button under AI Builder, then, if asked, click the existing Microsoft Dataverse connection that was created earlier.
 - [] For the **Prompt** parameter, click the dropdown menu and select **New custom prompt**.
 - [] After dismissing any teaching popups that appear, add +++Invoice validation prompt+++ as the prompt title.
 - [] In the instructions field, paste +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: (Invoice content) Purchase order: (Purchase order content)+++ into the field.
@@ -130,8 +128,8 @@ We're almost done with the prompt. Now we want to make sure it outputs the respo
 We're almost done. Let's connect the pipes that will bring our invoice and purchase order to the prompt and then configure the final action to respond to the agent.
 
 - [] In the **Run a prompt** parameters, you'll see two new parameters corresponding to the two input values you added to the prompt.
-  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to find **Content Bytes** under the **Get Attachment (V2)** action in the dynamic field list.
-  - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path**.
+  - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to find **File Content** under the **Get file content using path** action in the dynamic field list.
+  - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path 1**.
 - [] Click the **Respond to the agent** action. In the parameter panel, select **Add an output**. Select the blue **Yes/No** option.
   - [] Replace "Enter a name" with +++InvoiceMatch+++.
   - [] Replace "Enter a value to respond with" with by typing **/**, selecting **Insert dynamic content**, and selecting **InvoiceMatch** under **Run a prompt**.
@@ -151,7 +149,7 @@ We're almost done. Let's connect the pipes that will bring our invoice and purch
 
 You'll land in the Tools page of the Invoice handling agent (it may take a few seconds for your flow to appear). Let's rename the agent flow and make sure the agent knows when to call it. 
 
-- [] Click on the agent flow, which is currently called "Untitled." Enter +++Invoice validation flow+++ as the name and +++Use this to determine whether a submitted vendor invoice matches the PO on file.+++ as the description. Click **Save**.
+- [] Click on the agent flow, which is currently called "Untitled." Enter +++Invoice validation flow+++ as the model display name and +++Use this to determine whether a submitted vendor invoice matches the PO on file.+++ as the description. Click **Save**.
 - [] The flow itself is still named "Untitled," so let's fix that. Click the "Untitled" flow name in the **Agent flow** section. In the upper right corner of the **Details** panel, click **Edit**, replace the agent flow name with +++Invoice validation flow+++, click the circular arrow button to generate a new description of the agent flow, then click **Save**.
 - [] Navigate back to your agent by clicking **Agents** in the left nav, then **Invoice handling agent**.
 
@@ -164,9 +162,13 @@ Now that the agent flow is built and added, it's time to set up the trigger and 
 We want this particular agent to run in response to a business event, not a conversation. To do that, we need to add a trigger to the agent. In just a couple steps, we are going to add (and customize) a trigger that will fire whenever an email arrives in your inbox.
 
 - [] In the agent's **Overview** page, in the **Triggers** panel, select **Add trigger**.
-- [] In the window that appears, select the trigger called **When a new email arrives (V3)** from the **Office 365 Outlook** connector. Click **Next**.
+- [] In the window that appears, select the trigger called **When a file is created (properties only)** from the **SharePoint** connector. If it isn't visible, you can use the Search field to locate it. Click **Next**.
 - [] On the next screen, after a loading period, you should see the connections automatically form. You can leave the trigger name as it is and click **Next**.
-- [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and copy/paste the following:
+- [] On this screen, you can see the trigger's configuration options. For **Site Address**, click the dropdown and select **Add a custom item**. Enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ in the dialog that appears and select **OK**.
+- [] For **Library Name**, select "Invoices" from the dropdown.
+- [] For **Folder**, paste +++/Invoices/@lab.Variable(IDnumber)+++
+- [] Select **Create trigger**.
+REMOVE - [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and copy/paste the following:
 
 ```An email with an invoice has arrived. Use @{triggerOutputs()?['body/value'][0]['id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.
 ```
@@ -177,14 +179,17 @@ We want this particular agent to run in response to a business event, not a conv
 
 - [] Click **Create trigger**, then click **Close** when you see a celebratory message saying it's time to test.
 - [] On the top of the agent overview page, click **Publish**, then click **Publish** again.
-- [] We want to ensure the agent can connect to the flow, so in the ellipsis menu next to **Test your agent**, select **Manage connections**. In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the connections have a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
+- [] We want to ensure the agent can connect to the flow, so in the three dot menu next to **Test your agent**, select **Manage connections**. In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the SharePoint connection has a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
 
 # Section 4: Time to test!
 
 Let's see what we've got so far! Open a new tab in Edge and visit +++https://forms.office.com/r/N41p1fHAin+++. Selecting **Compliant** will randomly send one of four invoices that matches its corresponding purchase order in SharePoint. Selecting **Not compliant** will send an invoice that has the correct items and the correct total amount, but the quantities and prices of the items are different.
 
 - [] Select **Compliant** and submit the form, then return to your Copilot Studio tab.
-- [] Under the **Activity** tab, you should be able to see the agent run that just started. Click on it, and you can see how the agent successfully called the agent flow and received the response.
+- [] In the **Triggers** panel of the agent overview page, click the beaker icon in the same row as the **When a file is created (properties only)** trigger. This opens a dialog that will show the trigger instance you just initiated. By default, the SharePoint trigger checks for files every 60 seconds, so you may need to click the circular refresh arrow to see the trigger instance appear.
+- [] With the recent trigger instance selected, click **Start testing*
+
+REMOVE - [] Under the **Activity** tab, you should be able to see the agent run that just started. Click on it, and you can see how the agent successfully called the agent flow and received the response.
 
 # Section 5: Computer use
 
