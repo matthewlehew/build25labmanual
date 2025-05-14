@@ -1,8 +1,9 @@
-## NOTES for lab testers (Updated May 13, 2025, 12:58PM EDT)
+## NOTES for lab testers (Updated May 14, 2025, 12:20AM EDT)
 > [!Alert] We are currently working through the following issues:
 >
-> - Computer use tools cannot be built until eng finishes allowlisting the environments
-> - Emails from the flow that's sending the invoices for testing are being bounced back. This is because it's a trial tenant, there's an open ticket with MS Support to get this resolved. Plan B is to have participants manually email the invoice to themselves.
+> - Only remaining blocker: Computer use tools cannot be built until eng finishes allowlisting the environments
+> - There is a workaround for the connection creation bug that we can hopefully remove if the bug gets fixed.
+> - There is a workaround for the maker credentials bug that we can hopefully remove if the bug gets fixed.
 > - Please ping matthewlehew with any issues encountered during testing.
 
 # Extend agents everywhere: Agent flows and computer use tools in Copilot Studio
