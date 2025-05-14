@@ -42,11 +42,11 @@ Let's get started!
 >
 > There's a bug in test environments regarding brand new accounts like the lab accounts you're using today. This is a little trick to avoid it before it's fixed. :)
 
-- [] Click **Get Started** on the welcome dialog (and then **Skip** on the next welcome dialog if it appears) to be brought to an agent building experience, **but don’t start building the agent yet!**
+- [] Click **Get Started** on the welcome dialog if it appears (and then **Skip** on the next welcome dialog if it appears) to be brought to an agent building experience, **but don’t start building the agent yet!**
 
 > [!Alert] Make sure you follow the next step and change your environment!
 
-- [] In the upper right corner, click the environment name **Build2025Automations (default)** and change it to the Developer environment named after your user id, which should be listed under **Supported environments**.
+- [] In the upper right corner, click the environment name **Build2025Automations (default)** and click the environment named **user@lab.Variable(IDnumber)**, which is the Developer environment named after your user id, listed under **Supported environments**.
 - [] You will land on the Copilot Studio home page in the developer environment. If you see a “Welcome to Copilot Studio” banner, click **Next** twice, then **Done**.
 - [] In the left hand nav, click **Create**, then click **New agent**.
 
