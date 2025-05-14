@@ -73,11 +73,8 @@ Now it's time to create our agent flow.
 You'll land in the designer with two actions already created. The first is the trigger that accepts the call from the agent, and the second is the action that sends a response. The trigger will always be at the top, and the response will usually need to stay at the bottom.
 
 - [] Click the **When an agent calls the flow** trigger. In the panel that appears, click **Add an input**, then the purple **Text** option.
-  - [] In the name field, replace "Input" with +++Message ID+++.
-  - [] In the description field, replace "Please enter your input" with +++Use the email's Message ID.+++
-- [] Click **Add an input** again and select the purple **Text** option again.
-  - [] In the name field, replace "Input 1" with +++Attachment ID+++.
-  - [] In the description field, replace "Please enter your input" with +++Use the email's Attachment ID.+++
+  - [] In the name field, replace "Input" with +++File identifier+++.
+  - [] In the description field, replace "Please enter your input" with +++Use the file identifier of the new invoice.+++
 
 > [+Help] Why are we doing it this way? (Optional info)
 >
@@ -85,10 +82,11 @@ You'll land in the designer with two actions already created. The first is the t
 >
 > The other relevant reason is simpler: today, passing objects from agents to agents flows isn't yet supported. :) 
 
-- [] In the main canvas of the designer, click the **+** icon below the trigger (in between the two actions), then search for +++Get Attachment+++ and select the **Get Attachment (V2)** action that appears under **Office 365 Outlook**.
-  - [] Click **Sign in** to create your user's connection to Outlook. Select your user account in the pop-up window. If asked, click **Allow access**.
+- [] In the main canvas of the designer, click the **+** icon below the trigger (in between the two actions), then search for +++Get file content+++ and select the **Get file content** action that appears under **SharePoint**. Do **not** select the **Get file content using path** action.
+  - [] Click **Sign in** to create your user's connection to SharePoint. Select your user account in the pop-up window. If asked, click **Allow access**.
   - [] If you see an OAuth connection error, click the **Pop-Up Block** icon on the right side of the Edge address bar, then select "Always allow pop-ups and redirects from..." and click **Done**. Then try clicking **Sign in** again.
-- [] Fill the two required parameters for the Get Attachment action:
+- [] Fill the two required parameters for the **Get file content** action:
+  - [] In the Site Address parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
   - [] In the Message Id parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **Message ID**. This will insert a dynamic tag in the parameter field.
   - [] Do the same thing in the Attachment Id parameter, except under **When an agent calls the flow**, click **Attachment ID**.
 
