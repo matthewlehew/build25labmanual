@@ -20,10 +20,10 @@ If you see the number appear here, you're good to go: @lab.Variable(IDnumber)
 
 ## Lab Goals
 
-The goal of this lab is to build an agent that utilizes agent flows and computer use to process  incoming invoices. In this scenario, customers upload invoices to a web portal that does **not** provide API access, and the portal emails you a copy of the invoice. You are wanting to:
+The goal of this lab is to build an agent that utilizes agent flows and computer use to process incoming invoices. In this scenario, vendors upload invoices to a web portal that does **not** provide API access, and a copy of the invoice is sent to a SharePoint document library. You are wanting to:
 
-- Use AI to determine if the invoice aligns with the corresponding purchase order (hosted in a SharePoint document library)
-- Log invoices into a payment authorization platform that, like the web portal your customers use, doesn't provide API access.
+- Use AI to determine if the invoice aligns with the corresponding purchase order (also hosted in a SharePoint document library)
+- Log invoices into a payment authorization platform that, like the web portal the vendors use, doesn't provide API access.
 
 Let's get started!
 
@@ -33,7 +33,7 @@ Let's get started!
 
 - [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
 - [] Open Edge and navigate to +++make.powerautomate.com+++.
-- [] To sign in, use the following credentials. Choose the option to stay signed in, and dismiss any prompts from Edge that offer to reuse the password.
+- [] To sign in, use the following credentials. Choose **Yes** on the dialog asking if you want to stay signed in, and dismiss any prompts from Edge that offer to reuse the password.
   - Username: +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++
   - Password: +++test@Build25+++
 - [] In the left nav, at or near the bottom, click **Power Platform**, then **Copilot Studio**.
@@ -50,7 +50,7 @@ Let's get started!
 - [] You will land on the Copilot Studio home page in the developer environment. If you see a “Welcome to Copilot Studio” banner, click **Next** twice, then **Done**.
 - [] In the left hand nav, click **Create**, then click **New agent**.
 
-> [!Knowledge] You can experiment with the natural language process if you'd like, but we recomment following these steps to move quickly:
+> [!Knowledge] You can experiment with the natural language process if you'd like, but we recommend following these steps to move quickly:
 
 - [] Click **Skip to configure** in the upper right corner, then fill the following fields:
   - Name: +++Invoice handling agent+++
@@ -77,9 +77,9 @@ You'll land in the designer with two actions already created. The first is the t
   - [] In the name field, replace "Input" with +++File path+++.
   - [] In the description field, replace "Please enter your input" with +++Use the file path of the new invoice.+++
 
-> [+Help] Why are we doing it this way? (Optional info)
+> [+Help] What's up with the input variables? (Optional info)
 >
-> There are a couple reasons we are relying on the Get Attachment action rather than passing the attachment to the agent flow directly. First and foremost is security: In the event the agent is eventually designed to take on multiple tasks (or even conversations), we want to ensure invoice content can't accidentally be passed to the wrong place. With this design, the message and attachment IDs are being passed to the agent flow by the agent. Even if those IDs were passed to the wrong place, they can't be used to pull the attachment without the correct user authentication.
+> There are a couple reasons we are passing a path to the agent flow rather than passing the file content directly. First and foremost is security: In the event the agent is eventually designed to take on multiple tasks (or even conversations), we want to ensure invoice content can't accidentally be passed to the wrong place. With this design, only the file metadata, not the content, is handled by the agent. Even if the file path were passed to the wrong place, it couldn't be used to pull the content without the correct SharePoint access privileges.
 >
 > The other relevant reason is simpler: today, passing objects from agents to agents flows isn't yet supported. :) 
 
@@ -160,7 +160,7 @@ Now that the agent flow is built and added, it's time to set up the trigger and 
 
 # Section 3: Adding the trigger to the agent
 
-We want this particular agent to run in response to a business event, not a conversation. To do that, we need to add a trigger to the agent. In just a couple steps, we are going to add (and customize) a trigger that will fire whenever an email arrives in your inbox.
+We want this particular agent to run in response to a business event, not a conversation. To do that, we need to add a trigger to the agent. In just a few steps, we are going to add (and configure) a trigger that will fire whenever a document is placed in the specified SharePoint library.
 
 - [] In the agent's **Overview** page, in the **Triggers** panel, select **Add trigger**.
 - [] In the window that appears, select the trigger called **When a file is created (properties only)** from the **SharePoint** connector. If it isn't visible, you can use the Search field to locate it. Click **Next**.
@@ -168,29 +168,17 @@ We want this particular agent to run in response to a business event, not a conv
 - [] On this screen, you can see the trigger's configuration options. For **Site Address**, click the dropdown and select **Add a custom item**. Enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ in the dialog that appears and select **OK**.
 - [] For **Library Name**, select "Invoices" from the dropdown.
 - [] For **Folder**, paste +++/Invoices/@lab.Variable(IDnumber)+++
-- [] Select **Create trigger**.
-REMOVE - [] On this screen, you can see the trigger's configuration options. Scroll to the bottom until you see the parameter called **Additional instructions to the agent when it's invoked by this trigger**. Erase what is in the field and copy/paste the following:
-
-```An email with an invoice has arrived. Use @{triggerOutputs()?['body/value'][0]['id']} for Message ID and use @{triggerOutputs()?['body/value'][0]['attachments'][0]['id']} for Attachment ID to validate.
-```
-
-> [+Help] What did that do? (Optional info)
->
-> By default, the **When a new email arrives (V3)** trigger passes all of the email content to the agent. For the security reasons we mentioned earlier in this lab, this is an example of more tightly controlling that flow of information, only providing the agent with the Message and Attachment ID. This also simplifies the agent's task by giving it less information to parse. This step can often be skipped, but if you're experiencing unpredictable agent behavior, it's always a good idea to take a look at the flows of information to and from the agent.
-
 - [] Click **Create trigger**, then click **Close** when you see a celebratory message saying it's time to test.
 - [] On the top of the agent overview page, click **Publish**, then click **Publish** again.
-- [] We want to ensure the agent can connect to the flow, so in the three dot menu next to **Test your agent**, select **Manage connections**. In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the SharePoint connection has a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
+- [] We want to ensure the agent testing context can connect to the flow, so in the three dot menu next to **Test your agent**, select **Manage connections**. In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the SharePoint connection has a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
 
 # Section 4: Time to test!
 
-Let's see what we've got so far! Open a new tab in Edge and visit +++https://forms.office.com/r/N41p1fHAin+++. Selecting **Compliant** will randomly send one of four invoices that matches its corresponding purchase order in SharePoint. Selecting **Not compliant** will send an invoice that has the correct items and the correct total amount, but the quantities and prices of the items are different.
+Let's see what we've got so far! Open a new tab in Edge and visit +++https://forms.office.com/r/N41p1fHAin+++. Selecting **Compliant** will randomly deposit one of four invoices that matches its corresponding purchase order in SharePoint. Selecting **Not compliant** will send an invoice that has the correct items and the correct total amount, but the quantities and prices of the items are different.
 
 - [] Select **Compliant** and submit the form, then return to your Copilot Studio tab.
 - [] In the **Triggers** panel of the agent overview page, click the beaker icon in the same row as the **When a file is created (properties only)** trigger. This opens a dialog that will show the trigger instance you just initiated. By default, the SharePoint trigger checks for files every 60 seconds, so you may need to click the circular refresh arrow to see the trigger instance appear.
-- [] With the recent trigger instance selected, click **Start testing*
-
-REMOVE - [] Under the **Activity** tab, you should be able to see the agent run that just started. Click on it, and you can see how the agent successfully called the agent flow and received the response.
+- [] With the recent trigger instance selected, click **Start testing**. You'll see the Activity map, which shows how the the agent calls the agent flow, provides the file path as an input, and a few moments later sees the response values fill.
 
 # Section 5: Computer use
 
