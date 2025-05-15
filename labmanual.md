@@ -1,11 +1,3 @@
-## NOTES for lab testers (Updated May 14, 2025, 12:20AM EDT)
-> [!Alert] We are currently working through the following issues:
->
-> - Only remaining blocker: Computer use tools cannot be built until eng finishes allowlisting the environments
-> - There is a workaround for the connection creation bug that we can hopefully remove if the bug gets fixed.
-> - There is a workaround for the maker credentials bug that we can hopefully remove if the bug gets fixed.
-> - Please ping matthewlehew with any issues encountered during testing.
-
 # Extend agents everywhere: Agent flows and computer use tools in Copilot Studio
 
 ## Setup step
@@ -42,6 +34,8 @@ Let's get started!
 
 - [] In the left nav, at or near the bottom, click **Power Platform** (Depending on your screen resolution, you may just see the Power Platform logo), then **Copilot Studio**.
 
+!IMAGE[Img1.png](instructions291722/Img1.png)
+
 > [+Help] Why did I start in Power Automate? (Optional info)
 >
 > There's a bug in test environments regarding brand new accounts like the lab accounts you're using today. This is a little trick to avoid it before it's fixed. :)
@@ -51,22 +45,25 @@ Let's get started!
 > [!Alert] Make sure you follow the next step and change your environment!
 
 - [] In the upper right corner, click the environment name **Build2025Automations (default)** and click the environment named **user@lab.Variable(IDnumber)**, which is the Developer environment named after your user id, listed under **Supported environments**.
+
+!IMAGE[Img2.png](instructions291722/Img2.png)
+
 - [] You will land on the Copilot Studio home page in the developer environment. If you see a “Welcome to Copilot Studio” banner, click **Next** twice, then **Done**.
 - [] In the left hand nav, click **Create**, then click **New agent**.
 
 > [!Knowledge] You can experiment with the natural language process if you'd like, but we recommend following these steps to move quickly:
 
-- [] Click **Skip to configure** in the upper right corner, then fill the following fields:
+- [] Click the **Configure** in the sliding tab control on the left hand side, then fill the following fields:
   - Name: +++Invoice handling agent+++
   - Description: +++An agent that validates and logs incoming vendor invoices.+++
   - Instructions: +++When an invoice arrives via email, send the attachment information to the invoice validator agent flow to see if it's compliant. If it is, log the invoice in the payment system.+++
-- [] Click **Create** to land on the agent's Overview page. Under Details > Orchestration, the toggle should appear grey for a few seconds and then default to **Enabled**. If it doesn't, turn the toggle on.
+- [] Click **Continue** in the upper right corner to land on the agent's Overview page. Under Details > Orchestration, the toggle should default to **Enabled**. If it doesn't, turn the toggle on.
 
 > [+Help] Why didn't we add knowledge? (Optional info)
 >
 > Knowledge is a great tool for agents when you need to provide a lot of contextual information for the agent to consult at will. In this example, we want the agent to run the agent flow every time the email trigger is invoked, which can be handled with instructions alone. However, if we wanted to enable this agent for conversations about the company's invoice process or task it with making more subjective judgments over an invoice's validity, adding Knowledge would be the way to go.
 
-Now it's time to create our agent flow.
+Now it's time to create our agent flow, starting on the next page.
 
 ===
 
@@ -90,19 +87,24 @@ You'll land in the designer with two actions already created. The first is the t
 - [] In the main canvas of the designer, click the **+** icon below the trigger (in between the two actions), then search for +++Get file content using path+++ and select the **Get file content using path** action that appears under **SharePoint**.
   - [] Click **Sign in** to create your user's connection to SharePoint. **Do not check** "Connect via on-premises data gateway." Select your user account in the pop-up window. If asked, click **Allow access**.
   - [] If you see an OAuth connection error, click the **Pop-Up Block** icon on the right side of the Edge address bar, then select "Always allow pop-ups and redirects from..." and click **Done**. Then try clicking **Sign in** again.
+
+!IMAGE[Img3.png](instructions291722/Img3.png)
+
 - [] Fill the two required parameters for the **Get file content** action:
   - [] In the **Site Address** parameter, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
   - [] In the **File Path** parameter, type a **/** to bring up the insert menu, then select **Insert dynamic content**. In the list of parameters that appears, under **When an agent calls the flow**, click **File path**. This will insert a dynamic tag in the parameter field.
 
 It's time to add an AI-powered action that will pull the purchase order number from the invoice, which will help us grab the correct PO from SharePoint.
 
-- [] Click the **+** button under **Get file content** on the canvas to add a new action, then search for +++Process invoices+++ and click the **Process invoices** action under **AI Builder**.
+- [] Click the **+** button under **Get file content using path** on the canvas (directly above **Respond to the agent**) to add a new action, then search for +++Process invoices+++ and click the **Process invoices** action under **AI Builder**.
   - [] Click **Sign in** and create the connection.
   - [] In the **Invoice file** parameter, type **/** and click **Insert dynamic content**. Select **File Content** under the **Get file content using path** action in the parameter list.
-- [] Click the **+** button below **Process invoices** to add an action after the invoice processing action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint**.
-  - [] In the **Site Address** parameter of the new action, named **Get file content using path 1**, enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
-  - [] In the **File Path** parameter, type **/** and click **Insert expression**, which is the first time you're clicking this particular option.
-  - [] In the expression editor flyout that appears, paste +++concat('/Purchase Orders/',outputs('Process_invoices')?['body/responsev2/predictionOutput/result/fields/purchaseOrder/valueText'],'.pdf')+++ and then click **Add**.
+- [] Click the **+** button below **Process invoices** (again, directly above the **Respond to the agent** action) to add an action after the invoice processing action. Search for +++Get file content using path+++ and click the **Get file content using path** action under **SharePoint** to add a *second* instance of this action, which will be renamed **Get file content using path 1** in the designer.
+  - [] In the **Site Address** parameter of the new action (make sure you're editing the one named **Get file content using path 1**), enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ and select **"Use https://build2025automations.sharepoint.com/sites/FinanceCentral as a custom value"** in the dropdown.
+  - [] Automatic typing won't work for this step, so copy the following text by clicking it once, then paste it into the **File Path** field: ++@{concat('/Purchase Orders/',outputs('Process_invoices')?['body/responsev2/predictionOutput/result/fields/purchaseOrder/valueText'],'.pdf')}++
+  - [ ] Verify the preceding step was successful by checking to make sure an expression token was pasted into the field.
+
+!IMAGE[Img4.png](instructions291722/Img4.png)
 
 > [+Help] What is this doing? (Optional info)
 >
@@ -110,17 +112,22 @@ It's time to add an AI-powered action that will pull the purchase order number f
 
 We have the file content for our vendor invoice and the corresponding purchase order, now it's time to make sure they align!
 
-- [] Click the **+** button under **Get file content using path** to add a new action, then search for +++Run a prompt+++. Select the **Run a prompt** button under AI Builder, then, if asked, click the existing Microsoft Dataverse connection that was created earlier.
+- [] Click the **+** button under **Get file content using path 1** (the one right above **Respond to the agent**) to add a new action, then search for +++Run a prompt+++. Select the **Run a prompt** button under AI Builder, then, if asked, click the existing Microsoft Dataverse connection that was created earlier.
 - [] For the **Prompt** parameter, click the dropdown menu and select **New custom prompt**.
-- [] After dismissing any teaching popups that appear, add +++Invoice validation prompt+++ as the prompt title.
-- [] In the instructions field, paste +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: (Invoice content) Purchase order: (Purchase order content)+++ into the field.
+- [] After dismissing any teaching popups that appear, add +++Invoice validation prompt+++ as the prompt title at the top of the modal that appeared.
+- [] In the **Instructions** field, paste +++Compare the content of the invoice to the content of the purchase order. Make sure the items ordered and amount charged both align. Invoice: (Invoice content) Purchase order: (Purchase order content)+++ into the field.
   - [] Remove "(Invoice content)" from the prompt, place the cursor after "Invoice:", then type a **/** to open the add content menu. Select **Image or document** and then select **Ok** when the dialog appears about changing the model to GPT-4o. Rename the input from "Document input" to +++Invoice+++ and select **Close** (you can skip the sample data upload).
   - [] Remove "(Purchase order content)" from the prompt, place the cursor after "Purchase order:", then type a **/** to open the add content menu again. Select **Image or document** and then rename the input from "Document input" to +++Purchase order+++. Select **Close**.
  
 We're almost done with the prompt. Now we want to make sure it outputs the response in a format we can work with (as opposed to free text). 
 
 - [] On the right side of the prompt workspace, in the upper right hand corner of the **Model response** panel, click the **Text** dropdown and change the output format to **JSON**. In the same area of the screen, click the **Output settings** icon to the left of the word **Output**.
+
+!IMAGE[Img5.png](instructions291722/Img5.png)
+
 - [] The left side of the panel has changed to a JSON configuration experience. In the new window, paste the following: +++{"InvoiceMatch": true, "Reasoning": "The details of the invoice match the details of the purchase order."}+++ Then click **Apply**.
+
+!IMAGE[Img6.png](instructions291722/Img6.png)
 
 > [+Help] What was that about? (Optional info)
 >
@@ -134,7 +141,12 @@ We're almost done. Let's connect the pipes that will bring our invoice and purch
 
 - [] In the **Run a prompt** parameters, you'll see two new parameters corresponding to the two input values you added to the prompt.
   - [] For **Invoice**, type **/**, select **Insert dynamic content**, scroll down to find **File Content** under the **Get file content using path** action in the dynamic field list.
-  - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path 1**.
+  - [] For **Purchase order**, type **/**, select **Insert dynamic content**, and select **File content** under **Get file content using path 1**. 
+  
+> [!Alert] You are bringing two different SharePoint files to the AI prompt. Make sure you are selecting the **File Content** parameter from the correct actions. The invoice is coming from **Get file content using path** and the purchase order is coming from **Get file content using path 1**.
+>
+> This type of ambiguity is best resolved by replacing the action names with something more clear once they're added to the designer, which would also help your collaborators better understand your flow, but for the purpose of this lab we are skipping that.
+
 - [] Click the **Respond to the agent** action. In the parameter panel, select **Add an output**. Select the blue **Yes/No** option.
   - [] Replace "Enter a name" with +++InvoiceMatch+++.
   - [] Replace "Enter a value to respond with" with by typing **/**, selecting **Insert dynamic content**, and selecting **InvoiceMatch** under **Run a prompt**.
@@ -150,15 +162,19 @@ We're almost done. Let's connect the pipes that will bring our invoice and purch
 
 - [] Near the upper right corner of the designer, select **Save draft**, then **Publish**. Disregard the warning about **Run a prompt** not having a content approval action after it. Click **Go back to agent** on the dialog that appears.
 
+!IMAGE[Img7.png](instructions291722/Img7.png)
+
 > [!Knowledge] We are skipping the content approval because this is a controlled lab environment, but human review is always an important design element of a business process, especially processes augmented by AI. Even if it isn't part of the specific flow you build, your business process should include human review of important decisions or content generated by AI.
 
 You'll land in the Tools page of the Invoice handling agent (it may take a few seconds for your flow to appear). Let's rename the agent flow and make sure the agent knows when to call it. 
 
 - [] Click on the agent flow, which is currently called "Untitled." Enter +++Invoice validation flow+++ as the model display name and +++Use this to determine whether a submitted vendor invoice matches the PO on file.+++ as the description. Click **Save**.
-- [] The flow itself is still named "Untitled," so let's fix that. Click the "Untitled" flow name in the **Agent flow** section. In the upper right corner of the **Details** panel, click **Edit**, replace the agent flow name with +++Invoice validation flow+++, click the circular arrow button to generate a new description of the agent flow, then click **Save**.
-- [] Navigate back to your agent by clicking **Agents** in the left nav, then **Invoice handling agent**.
 
-Now that the agent flow is built and added, it's time to set up the trigger and test it out!
+> [+Help] What about the name of the agent flow itself? (Optional info)
+>
+> Future updates are streamlining the process of renaming your agent flow. For today, we've accomplished the important thing, which is setting the name and description the agent sees when determining what tool to use.
+
+Now that the agent flow is built and added, it's time to set up the trigger and test it out, starting on the next page!
 
 ===
 
@@ -166,7 +182,7 @@ Now that the agent flow is built and added, it's time to set up the trigger and 
 
 We want this particular agent to run in response to a business event, not a conversation. To do that, we need to add a trigger to the agent. In just a few steps, we are going to add (and configure) a trigger that will fire whenever a document is placed in the specified SharePoint library.
 
-- [] In the agent's **Overview** page, in the **Triggers** panel, select **Add trigger**.
+- [] In the agent's **Overview** page, scroll down to the **Triggers** panel and select **Add trigger**.
 - [] In the window that appears, select the trigger called **When a file is created (properties only)** from the **SharePoint** connector. If it isn't visible, you can use the Search field to locate it. Click **Next**.
 - [] On the next screen, after a loading period, you should see the connections automatically form. You can leave the trigger name as it is and click **Next**.
 - [] On this screen, you can see the trigger's configuration options. For **Site Address**, click the dropdown and select **Add a custom item**. Enter +++https://build2025automations.sharepoint.com/sites/FinanceCentral+++ in the dialog that appears and select **OK**.
@@ -174,26 +190,54 @@ We want this particular agent to run in response to a business event, not a conv
 - [] For **Folder**, paste +++/Invoices/@lab.Variable(IDnumber)+++
 - [] Click **Create trigger**, then click **Close** when you see a celebratory message saying it's time to test.
 - [] On the top of the agent overview page, click **Publish**, then click **Publish** again.
-- [] We want to ensure the agent testing context can connect to the flow, so in the three dot menu next to **Test your agent**, select **Manage connections**. In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the SharePoint connection has a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
+- [] We want to ensure the agent testing context can connect to the flow, so in the three dot menu next to **Test your agent**, select **Manage connections**.
+
+!IMAGE[Img8.png](instructions291722/Img8.png)
+
+- [ ] In the new tab that opens, in the row that says **Invoice validation flow**, click **Connect**, verify the SharePoint connection has a green check mark, then click **Submit**. Once the status is Connected, you can close that tab to return to Copilot Studio.
 
 # Section 4: Time to test!
 
 Let's see what we've got so far! Open a new tab in Edge and visit +++https://forms.office.com/r/N41p1fHAin+++. Selecting **Compliant** will randomly deposit one of four invoices that matches its corresponding purchase order in SharePoint. Selecting **Not compliant** will send an invoice that has the correct items and the correct total amount, but the quantities and prices of the items are different.
 
 - [] Select **Compliant** and submit the form, then return to your Copilot Studio tab.
-- [] In the **Triggers** panel of the agent overview page, click the beaker icon in the same row as the **When a file is created (properties only)** trigger. This opens a dialog that will show the trigger instance you just initiated. By default, the SharePoint trigger checks for files every 60 seconds, so you may need to click the circular refresh arrow to see the trigger instance appear.
+- [] In the **Triggers** panel of the agent overview page, click the beaker icon in the same row as the **When a file is created (properties only)** trigger. This opens a dialog that will show the trigger instance you just initiated. By default, the SharePoint trigger checks for files every 60 seconds, so you may need to click the circular refresh arrow a few times to see the trigger instance appear.
 - [] With the recent trigger instance selected, click **Start testing**. You'll see the Activity map, which shows how the the agent calls the agent flow, provides the file path as an input, and a few moments later sees the response values fill.
 
 # Section 5: Computer use
 
+> [!Alert] Computer use is a capability in **research preview** and is not quite ready for production primetime. The near-term roadmap includes many improvements, including robust, secure credential handling.
+>
+> For today's demo, we are streamlining the scenario with a test site that does not require authentication. The goal of this demo is to help you visualize how, with credential management, computer use could finish the agent's job of logging the validated invoice into a legacy system of record.
+
 The last part of this lab involves adding a computer use tool so the agent can log the compliant invoice into the web app.
-- [] In the Overview tab of the newly created agent, scroll down to **Actions**, click on **Add action**, **New action** and select **Computer use**.
-- [] In the first step you will be asked to create a connection to Computer use. Select the machine that has been provisioned. For username and password, enter the ones to connect to the machine.
-- [] After the connection's details have been confirmed, provide the following information to set up the tool:
-    * **Name:** +++Register new invoices+++
-    * **Description:** +++Register new invoices from the last 24h+++
-    * **Instructions:** +++Go to https://rpxpmshare.blob.core.windows.net/web/Contoso/invoice-manager.html, filter invoices by the last 24 hours, open the invoice PDF and using its content create an invoice at https://rpxpmshare.blob.core.windows.net/web/Contoso/index.html+++
+- [] In the Overview tab of the agent, scroll down to **Tools**, click **Add tool**, then click **New tool**, and then select **Computer use**.
+- [] In the first step you will be asked to create a connection to the Computer use tool. Click the **Create** link and dismiss the "Switch to credentials" teaching bubble. 
+- [] For **Agent machine**, click the dropdown and select **ComputerUse@lab.Variable(IDnumber)**. 
+- [] For **Domain and username**, enter +++computeruser@build2025automations.onmicrosoft.com+++.
+- [] For **Password**, enter +++test@Build25+++.
+- [] Click **Create**, then **Add and configure**. 
+- [] On the **Details** page, provide the following information to finish setting up the computer use tool:
+  - [] **Name:** +++Register new invoices+++
+  - [] **Description:** +++Register new invoices from the last 24h+++
+  - [] **Instructions:** +++Go to https://rpxpmshare.blob.core.windows.net/web/Contoso/invoice-manager.html, filter invoices by the last 24 hours, open the invoice PDF and using its content create an invoice at https://rpxpmshare.blob.core.windows.net/web/Contoso/index.html+++
+- [] Click **Save**.
+- [] Click **Publish** in the upper right hand corner of the page to republish the agent.
+
+Let's see it work!
+
+- [] Click **Test** (right above the Instructions input) to see the computer use tool work. It will take a few seconds to connect to the machine. Then, you will see on the left the reasoning steps from the model. On the right you'll see the preview of what is happening on the machine.
+
+!IMAGE[Img9.png](instructions291722/Img9.png)
+
+> [!Knowledge] Notice how, after opening the second tab, the tool is able to successfully navigate the "unexpected" system maintenance notice, a very common issue that trips up traditional UI automations.
+
+- [] When you go to the agent's **Activity** panel, you can click the latest run to see the activity record of the computer use tool. Clicking the **Activity map** dropdown and switching to **Transcript** will let you see the images that show how the tool progressed through its task.
+
+!IMAGE[Img10.png](instructions291722/Img10.png)
 
 Once you have configured the computer use action, you can click on it to see its details and test it. When you click on test, computer use will take a few seconds to connect to the machine. Then you will see on the left the reasoning steps from computer use and on the right the preview of what is happening in the machine. 
 
-When the computer use action is used by your agent, you can go to Activity. Select an agent run, and when switching to the Transcript view you will be able to see the full activity of what your computer use tool did.
+# Conclusion
+
+Amazing conclusion will go here. 
