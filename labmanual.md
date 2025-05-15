@@ -32,11 +32,15 @@ Let's get started!
 > [!Knowledge] Text formatted as an +++example+++ represents type text. Clicking on this text will automatically insert it wherever your lab cursor is. Use this to prevent any typing or copy/pasting errors!
 
 - [] To begin, log into the virtual machine with this password: +++@lab.VirtualMachine(Win11-Pro-Base).Password+++
+  - [] If you see a full-page splash about backing up your PC, click **Opt-out of backup** and then **Skip for now**.
 - [] Open Edge and navigate to +++make.powerautomate.com+++.
 - [] To sign in, use the following credentials. Choose **Yes** on the dialog asking if you want to stay signed in, and dismiss any prompts from Edge that offer to reuse the password.
   - Username: +++user@lab.Variable(IDnumber)@build2025automations.onmicrosoft.com+++
   - Password: +++test@Build25+++
-- [] In the left nav, at or near the bottom, click **Power Platform**, then **Copilot Studio**.
+
+> [!Alert] **Important:** Make sure you let the Power Automate home page load fully. Because it's the user account's first login, it may take a while. You should see the environment name and user account information appear in the upper-right hand corner before you navigate away.
+
+- [] In the left nav, at or near the bottom, click **Power Platform** (Depending on your screen resolution, you may just see the Power Platform logo), then **Copilot Studio**.
 
 > [+Help] Why did I start in Power Automate? (Optional info)
 >
